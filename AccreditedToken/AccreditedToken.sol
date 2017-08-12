@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.11;
 
 import './ERC20.sol';
 
@@ -14,18 +14,32 @@ contract AccreditedToken is ERC20 {
      * @param _value The amount of tokens to be transferred.
      */
     modifier accreditationVerified (address investorAddress) {
+        //Check tokenRegistered value to determine if registration statement filed
+        //If registration filed, modifier evaluates to true and returns to function
+        //If false, then proceeds to verify investor
         //Evaluate if investorAddress stored in map of approved accredited investors
         //Require bool value returned to evaluate to true
         //otherwise, exit function
         _;
     }
 
-      /**
-   * @dev Checks whether it can transfer or otherwise throws.
-   */
+    /**
+    * @dev Checks whether it can transfer or otherwise throws. 
+    * NOTE THIS RELATES TO TRANSFERFROM FUNCTION--NOT ACCREDITATION STATUS
+    */
     modifier canTransfer(address _sender, uint256 _value) {
         require(_value <= transferableTokens(_sender, uint64(now)));
         _;
+    }
+    /**
+     * @dev Function that triggers API call to third party accreditation service to verify status approved
+     * @param _to The address that will receive the tokens.
+     * @param _value The amount of tokens to be transferred.
+     */
+    function registrationFiled() returns (bool) {
+        //msg.sender must equal designated officers authorized to remove restriction on transfers;
+        //If true, sets value of registrationStatementFiled = true;
+        //otherwise, exit function
     }
 
     /**
